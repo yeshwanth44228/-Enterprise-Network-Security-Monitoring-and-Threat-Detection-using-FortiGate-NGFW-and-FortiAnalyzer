@@ -1,0 +1,27 @@
+// Detection: Suspicious PowerShell execution
+// Log source: Windows Security Events with Event ID 4688 process command-line logging
+// MITRE ATT&CK: T1059.001 - PowerShell
+// Recommended severity: High
+
+SecurityEvent
+| where EventID == 4688
+| where TimeGenerated > ago(24h)
+| extend ProcessName = tostring(NewProcessName)
+| extend Cmd = tostring(CommandLine)
+| where ProcessName has_any ("powershell.exe", "pwsh.exe")
+    or Cmd has_any ("powershell", "pwsh")
+| where Cmd has_any (
+    "-EncodedCommand",
+    "-enc",
+    "Invoke-WebRequest",
+    "Invoke-Expression",
+    "IEX",
+    "DownloadString",
+    "FromBase64String",
+    "bypass",
+    "hidden",
+    "nop",
+    "noni"
+)
+| project TimeGenerated, Computer, Account, ProcessName, Cmd, ParentProcessName
+| order by TimeGenerated desc

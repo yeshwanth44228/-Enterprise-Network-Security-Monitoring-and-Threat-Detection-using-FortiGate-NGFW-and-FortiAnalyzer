@@ -1,0 +1,18 @@
+// Detection: Privilege escalation and privileged account activity
+// Log source: Windows Security Events
+// MITRE ATT&CK: T1068 - Exploitation for Privilege Escalation, T1078 - Valid Accounts
+// Recommended severity: High
+
+SecurityEvent
+| where TimeGenerated > ago(24h)
+| where EventID in (4672, 4720, 4728, 4732, 4756)
+| extend EventMeaning = case(
+    EventID == 4672, "Special privileges assigned to new logon",
+    EventID == 4720, "User account created",
+    EventID == 4728, "User added to privileged global group",
+    EventID == 4732, "User added to privileged local group",
+    EventID == 4756, "User added to privileged universal group",
+    "Privileged account activity"
+)
+| project TimeGenerated, Computer, Account, TargetAccount, EventID, EventMeaning, Activity
+| order by TimeGenerated desc

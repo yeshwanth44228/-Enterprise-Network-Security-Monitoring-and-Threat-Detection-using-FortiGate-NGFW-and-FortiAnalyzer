@@ -89,3 +89,11 @@ flowchart LR
 - Add SSL inspection for deeper web traffic visibility where policy and privacy requirements allow.
 - Expand the detection catalog to include malware, brute force, data exfiltration, and command-and-control indicators.
 - Create scheduled daily and weekly executive reports.
+
+## Advanced SOC Extension
+
+An advanced resume-focused extension has been added under `advanced-soc-lab/`.
+
+This extension upgrades the project into a MITRE ATT&CK-based detection engineering lab using Microsoft Sentinel, KQL analytics rules, FortiGate/FortiAnalyzer telemetry, Windows Security Events, and SOAR-style incident enrichment.
+
+Start here: [advanced-soc-lab/README.md](advanced-soc-lab/README.md)
